@@ -10,12 +10,18 @@ Upon running ``python3 nescavate.py``, you will be prompted to enter the startin
 Seeds are displayed in the form ``[prngByte1 prngByte2] pieceCount frameCount``, where ``pieceCount`` is taken modulo 8 and ``frameCount`` is taken modulo 4. The ``startAtSeed.lua`` script can be loaded into the Mesen NES emulator, which will force every game to start at the determined seed.
 
 # Implementation
-To be added.
+Messy notes of mine. May cleanup later.
+
+ - We define the starting seed as the combination of prng, cleared pieces, and global timer (mod 4) at the beginning of the frame where the Start button is registered
+ - From here, it takes 4 frames to generate the next two pieces, which are called consecutively with one prng scramble.
+ - The seed of each piece is the combination of all those things at the beginning of the frame where the piece is initialized (exception is piece 2: see previous note)
+ - For non line clears, the number of frames it took for piece i - 1 added to piece i - 1's entry delay (which happens after its lock) is the number of prng calls between the determination of piece i and piece i + 1
 
 # TODO
 ## Important
 - Finish the part that figures out the first two pieces.
 - Once the number of seeds becomes small, start asking if the user wants to finish, from which true first seed is computed.
+- Modify startup so that we don't need 0.6 GiB of memory.
 - Implement score/lines tracking, ask for pushdown values to estimate frame counts.
 - Alternatively, see if it's possible to narrow stuff down without using those.
 
